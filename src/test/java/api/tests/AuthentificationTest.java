@@ -7,7 +7,7 @@ import java.util.Map;
 
 import static config.TestConfig.*;
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class AuthentificationTest {
     @Test
@@ -19,14 +19,20 @@ public class AuthentificationTest {
                         PASSWORD
                 );
 
-        given()
+        String token = given()
                 .spec(ApiHelper.requestSpec())
                 .body(credentials)
                 .when()
                 .post("/auth")
                 .then()
                 .statusCode(200)
-                .body("reason", equalTo("Bad credentials"));
+                .extract()
+                .path("token");
+
+        assertThat(token)
+                .as("Token was generated correctly")
+                .isNotNull()
+                .isNotBlank();
     }
 
     @Test
@@ -38,13 +44,18 @@ public class AuthentificationTest {
                         ""
                 );
 
-        given()
+        String token = given()
                 .spec(ApiHelper.requestSpec())
                 .body(credentials)
                 .when()
                 .post("/auth")
                 .then()
                 .statusCode(200)
-                .body("reason", equalTo("Bad credentials"));
+                .extract()
+                .path("reason");
+
+        assertThat(token)
+                .as("Token was not generated correctly")
+                .isEqualTo("Bad credentials");
     }
 }

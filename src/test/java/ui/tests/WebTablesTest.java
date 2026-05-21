@@ -1,27 +1,19 @@
 package ui.tests;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import ui.base.BaseUITest;
 import ui.pages.WebTablesPage;
-
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Tag("ui")
 public class WebTablesTest extends BaseUITest {
-
-    private WebTablesPage webTablesPage;
-
-    @BeforeEach
-    void setUpPage() {
-        webTablesPage = new WebTablesPage(page);
-    }
 
     @Test
     @DisplayName("Add a new record to Web Tables")
-    void testAddNewRecord() throws InterruptedException {
+    void testAddNewRecord() {
+        WebTablesPage webTablesPage = new WebTablesPage(page);
         String uniqueId = UUID.randomUUID().toString().substring(0, 8);
         String firstName = "Auto" + uniqueId;
         String email = "auto" + uniqueId + "@test.com";
@@ -37,7 +29,8 @@ public class WebTablesTest extends BaseUITest {
 
     @Test
     @DisplayName("Edit an existing record in Web Tables")
-    void testEditExistingRecord() throws InterruptedException {
+    void testEditExistingRecord() {
+        WebTablesPage webTablesPage = new WebTablesPage(page);
         String uniqueId = UUID.randomUUID().toString().substring(0, 8);
         String originalFirstName = "Edit" + uniqueId;
         String updatedFirstName = "Updated" + uniqueId;
@@ -62,7 +55,8 @@ public class WebTablesTest extends BaseUITest {
 
     @Test
     @DisplayName("Delete a record from Web Tables")
-    void testDeleteRecord() throws InterruptedException {
+    void testDeleteRecord() {
+        WebTablesPage webTablesPage = new WebTablesPage(page);
         String uniqueId = UUID.randomUUID().toString().substring(0, 8);
         String firstName = "Delete" + uniqueId;
         String email = "delete" + uniqueId + "@test.com";
@@ -81,7 +75,8 @@ public class WebTablesTest extends BaseUITest {
 
     @Test
     @DisplayName("Search filters rows in Web Tables")
-    void testSearchFunctionality() throws InterruptedException {
+    void testSearchFunctionality() {
+        WebTablesPage webTablesPage = new WebTablesPage(page);
         String uniqueId = UUID.randomUUID().toString().substring(0, 8);
         String firstName = "Search" + uniqueId;
         String email = "search" + uniqueId + "@test.com";

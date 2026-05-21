@@ -1,7 +1,7 @@
 package api.tests;
 
 import api.helpers.ApiHelper;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.util.List;
 import java.util.Map;
@@ -9,6 +9,7 @@ import java.util.Map;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Tag("api")
 public class GraphQLApiTest {
 
     private static final String EXISTING_MOVIE_ID = "clq3uswv1001q0blchscxb6ba";
@@ -202,7 +203,7 @@ public class GraphQLApiTest {
                 .extract()
                 .jsonPath();
         List<String> errors = jsonPath.getList("errors.message");
-        assertThat(errors.get(0))
+        assertThat(errors.getFirst())
                 .as("The error message should explicitly mention the invalid field name")
                 .contains("notExistedField")
                 .isNotNull();

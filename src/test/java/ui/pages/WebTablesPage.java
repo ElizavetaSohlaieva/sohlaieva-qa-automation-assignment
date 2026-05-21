@@ -20,8 +20,6 @@ public class WebTablesPage {
     private final Locator departmentInput;
     private final Locator submitButton;
 
-    // mvn exec:java -e -D exec.mainClass=com.microsoft.playwright.CLI -D exec.args="codegen https://demoqa.com/webtables"
-
     public WebTablesPage(Page page) {
         this.page = page;
 
@@ -41,34 +39,29 @@ public class WebTablesPage {
         return this;
     }
 
-    public WebTablesPage fillPersonalData(String firstName, String lastName, String email, String age, String salary, String department) throws InterruptedException {
+    public WebTablesPage fillPersonalData(String firstName, String lastName, String email, String age, String salary, String department) {
         firstNameInput.clear();
         firstNameInput.fill(firstName);
-        Thread.sleep(1000);
         lastNameInput.clear();
         lastNameInput.fill(lastName);
         emailInput.clear();
         emailInput.fill(email);
         ageInput.clear();
         ageInput.fill(age);
-        Thread.sleep(1000);
         salaryInput.clear();
         salaryInput.fill(salary);
         departmentInput.clear();
         departmentInput.fill(department);
-        Thread.sleep(1000);
         return this;
     }
 
-    public WebTablesPage addRecord() throws InterruptedException {
+    public WebTablesPage addRecord() {
         addButton.click();
-        Thread.sleep(1000);
         return this;
     }
 
-    public WebTablesPage submitRecord() throws InterruptedException {
+    public WebTablesPage submitRecord() {
         submitButton.click();
-        Thread.sleep(1000);
         return this;
     }
 
@@ -77,16 +70,14 @@ public class WebTablesPage {
     }
 
     public WebTablesPage editRecord(String uniqueText) {
-        // Находим нужную строку и внутри неё кликаем по элементу с title="Edit"
         Locator row = getRowByText(uniqueText);
         row.getByTitle("Edit").click();
         return this;
     }
 
-    public WebTablesPage deleteRecord(String uniqueText) throws InterruptedException {
+    public WebTablesPage deleteRecord(String uniqueText) {
         Locator row = getRowByText(uniqueText);
         row.getByTitle("Delete").click();
-        Thread.sleep(2000);
         return this;
     }
 

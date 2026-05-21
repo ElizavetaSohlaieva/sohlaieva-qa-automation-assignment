@@ -7,6 +7,7 @@ import ui.pages.FormPage;
 import java.io.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+@Tag("ui")
 public class FormTest extends BaseUITest {
 
     @Test

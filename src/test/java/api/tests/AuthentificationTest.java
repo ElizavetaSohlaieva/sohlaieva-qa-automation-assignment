@@ -1,7 +1,7 @@
 package api.tests;
 
 import api.helpers.ApiHelper;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.util.Map;
 
@@ -9,6 +9,7 @@ import static config.TestConfig.*;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+@Tag("api")
 public class AuthentificationTest {
     @Test
     void shouldGenerateAuthTokenWithValidCredentials() {

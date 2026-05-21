@@ -8,7 +8,6 @@ import java.nio.file.Paths;
 import static config.TestConfig.UI_BASE_URL;
 
 public class FormPage {
-    // mvn exec:java -e -D exec.mainClass=com.microsoft.playwright.CLI -D exec.args="codegen https://demoqa.com/automation-practice-form"
     private final Page page;
 
     private final Locator firstNameInput;

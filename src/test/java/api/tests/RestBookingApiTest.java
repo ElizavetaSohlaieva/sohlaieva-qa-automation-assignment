@@ -1,14 +1,21 @@
 package api.tests;
 
 import api.helpers.ApiHelper;
-import api.models.Booking;
-import api.models.BookingDates;
-import api.models.BookingId;
-import org.junit.jupiter.api.Test;
+import api.models.*;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
+
+import java.util.Map;
+import java.util.stream.Stream;
+
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+@Tag("api")
 public class RestBookingApiTest {
     private static final int NON_EXISTING_BOOKING_ID = 99999999;
 
@@ -40,7 +47,7 @@ public class RestBookingApiTest {
                 .path("bookingid");
     }
 
-    // ===================== CRUD =====================
+    // CRUD
 
     @Test
     void shouldCreateBooking() {
@@ -130,7 +137,7 @@ public class RestBookingApiTest {
         assertThat(statusCode).isEqualTo(201);
     }
 
-    // ===================== SEARCH =====================
+    // SEARCH
 
     @Test
     void shouldGetAllBookings() {
@@ -149,13 +156,14 @@ public class RestBookingApiTest {
         assertThat(response).isNotNull();
     }
 
-    @Test
-    void shouldFilterByFirstname() {
+    @ParameterizedTest(name = "Filter with parametrizes: {0}")
+    @MethodSource("provideFilterParameters")
+    void shouldFilterByFirstname(String testName, Map<String, String> queryParams) {
 
         var response =
                 given()
                         .spec(ApiHelper.requestSpec())
-                        .queryParam("firstname", "John")
+                        .queryParams(queryParams)
                         .when()
                         .get("/booking")
                         .then()
@@ -165,6 +173,17 @@ public class RestBookingApiTest {
                         .getList("", BookingId.class);
 
         assertThat(response).isNotNull();
+    }
+    //additional method that provides data for test
+    private static Stream<Arguments> provideFilterParameters() {
+        return Stream.of(
+                Arguments.of("Without filter", Map.of()),
+                Arguments.of("Names", Map.of("firstname", "John")),
+                Arguments.of("Dates checkin and checkout", Map.of(
+                        "checkin", "2025-01-01",
+                        "checkout", "2025-01-10"
+                ))
+        );
     }
 
     @Test
@@ -186,16 +205,16 @@ public class RestBookingApiTest {
         assertThat(response).isNotNull();
     }
 
-    // ===================== NEGATIVE =====================
-
-    @Test
-    void shouldReturn404ForNonExistingBooking() {
+    // NEGATIVE
+    @ParameterizedTest(name = "GET /booking/{0} should return 404")
+    @ValueSource(ints = {99999999, -1, 0})
+    void shouldReturn404ForNonExistingBookingIds(int invalidId) {
 
         int statusCode =
                 given()
                         .spec(ApiHelper.requestSpec())
                         .when()
-                        .get("/booking/" + NON_EXISTING_BOOKING_ID)
+                        .get("/booking/" + invalidId)
                         .then()
                         .extract()
                         .statusCode();
@@ -250,7 +269,7 @@ public class RestBookingApiTest {
         assertThat(statusCode).isEqualTo(200);
     }
 
-    // ===================== VALIDATION =====================
+    // VALIDATION
 
     @Test
     void shouldMatchBookingSchema() {

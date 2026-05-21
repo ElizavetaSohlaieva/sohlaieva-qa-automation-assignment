@@ -19,10 +19,6 @@ public class BaseUITest {
 
     private static final Path SCREENSHOT_DIR = Paths.get("target", "screenshots");
 
-    /**
-     * Runs after the test method, but before @AfterEach — page is still open.
-     * TestWatcher.testFailed runs later, so a boolean flag there is too late.
-     */
     @RegisterExtension
     final AfterTestExecutionCallback screenshotOnFailure = context -> {
         if (context.getExecutionException().isEmpty() || page == null) {
